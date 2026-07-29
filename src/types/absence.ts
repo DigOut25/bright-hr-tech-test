@@ -18,3 +18,9 @@ export interface Conflict {
 }
 
 export type AbsenceType = "ANNUAL_LEAVE" | "SICKNESS" | "MEDICAL";
+
+export type SortColumn =
+  | "startDate"
+  | "endDate"
+  | "employeeName"
+  | "absenceType";
