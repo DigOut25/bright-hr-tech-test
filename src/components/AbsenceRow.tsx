@@ -1,5 +1,6 @@
 import type { Absence } from "../types/absence";
 import { deriveEndDate, formatAbsenceType, formatDate } from "../utils";
+import { Conflict } from "./Conflict";
 
 export function AbsenceRow({ absence }: { absence: Absence }) {
   const endDate = deriveEndDate(absence.startDate, absence.days);
@@ -13,6 +14,9 @@ export function AbsenceRow({ absence }: { absence: Absence }) {
       <td className="px-4 py-2">{formatDate(endDate)}</td>
       <td className="px-4 py-2">{formatAbsenceType(absence.absenceType)}</td>
       <td className="px-4 py-2">{absence.approved ? "Approved" : "Pending"}</td>
+      <td className="px-4 py-2">
+        <Conflict absenceId={absence.id} />
+      </td>
     </tr>
   );
 }
