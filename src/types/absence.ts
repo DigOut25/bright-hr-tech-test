@@ -8,7 +8,7 @@ export interface Absence {
   id: number;
   startDate: string;
   days: number;
-  absenceType: string;
+  absenceType: AbsenceType;
   employee: Employee;
   approved: boolean;
 }
@@ -16,3 +16,5 @@ export interface Absence {
 export interface Conflict {
   conflicts: boolean;
 }
+
+export type AbsenceType = "ANNUAL_LEAVE" | "SICKNESS" | "MEDICAL";
