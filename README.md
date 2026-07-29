@@ -1,75 +1,33 @@
-# React + TypeScript + Vite
+# BrightHR Absences — Tech Test
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple app showing employee absences, built with React, TypeScript, TanStack Query, and Tailwind.
 
-Currently, two official plugins are available:
+## Running the app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Running the tests
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm run test
 ```
+
+## What I built
+
+- A table showing all absences — name, start date, end date, absence type, and whether it's approved.
+- The API doesn't give an end date, just a start date and how many days off — so I work the end date out myself from those two.
+- **Conflict check** (feature 1): each row checks separately whether there's a conflict, and shows loading/error/warning depending on what comes back. The main row shows straight away and doesn't wait around for this extra check.
+- **Sorting** (feature 2): a dropdown to sort by date, type, or name. It only sorts one way (not both ascending and descending) — the brief just asked for sorting, so I kept it simple.
+- Some tests: a few for the small helper functions, and one testing the actual data-fetching hook.
+
+## What I'd do with more time
+
+- Add a proper component test for the conflict indicator covering its different states (loading, error, has conflict, no conflict) — I didn't get to wiring up React Testing Library for this one.
+- Make the sorting proper clickable column headers instead of a dropdown, with arrows showing direction — more normal for a table like this. The logic wouldn't change much, just how you trigger it.
+- Build the third optional feature (click a name to see all their absences) — didn't get to it, but it'd just mean filtering the same list by employee rather than anything new.
+- Double-check the data coming back from the API actually matches what I'm expecting, rather than just trusting it — I'd use something like Zod for that.
+- Right now every row makes its own separate request to check for conflicts — fine for this amount of data, but I'd want a better way of doing that if there were hundreds of rows.
+- Make it look better on mobile — right now it just scrolls sideways rather than resizing properly.
