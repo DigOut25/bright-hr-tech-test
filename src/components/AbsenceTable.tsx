@@ -1,7 +1,14 @@
+import type { Dispatch, SetStateAction } from "react";
 import type { Absence } from "../types/absence";
 import { AbsenceRow } from "./AbsenceRow";
 
-export function AbsenceTable({ absences }: { absences: Absence[] }) {
+export function AbsenceTable({
+  absences,
+  onSelectEmployee,
+}: {
+  absences: Absence[];
+  onSelectEmployee: Dispatch<SetStateAction<string | null>>;
+}) {
   return (
     <table className="w-full text-left text-sm">
       <thead>
@@ -16,7 +23,11 @@ export function AbsenceTable({ absences }: { absences: Absence[] }) {
       </thead>
       <tbody>
         {absences.map((absence) => (
-          <AbsenceRow key={absence.id} absence={absence} />
+          <AbsenceRow
+            key={absence.id}
+            absence={absence}
+            onSelectEmployee={onSelectEmployee}
+          />
         ))}
       </tbody>
     </table>
