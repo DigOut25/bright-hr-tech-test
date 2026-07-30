@@ -3,7 +3,7 @@ import { AbsenceTable } from "./components/AbsenceTable";
 import { useAbsences } from "./hooks/useAbsences";
 import type { SortColumn } from "./types/absence";
 import { SortBy } from "./components/SortBy";
-import { deriveEndDate, formatAbsenceType } from "./utils";
+import { sortAbsences } from "./utils";
 
 function App() {
   const { data, isLoading, isError } = useAbsences();
@@ -14,28 +14,7 @@ function App() {
   );
 
   const sortedData = useMemo(() => {
-    if (!data) return [];
-    return [...data].sort((a, b) => {
-      switch (sortBy) {
-        case "startDate":
-          return (
-            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-          );
-        case "endDate":
-          return (
-            deriveEndDate(a.startDate, a.days).getTime() -
-            deriveEndDate(b.startDate, b.days).getTime()
-          );
-        case "absenceType":
-          return formatAbsenceType(a.absenceType).localeCompare(
-            formatAbsenceType(b.absenceType)
-          );
-        case "employeeName":
-          return `${a.employee.lastName}${a.employee.firstName}`.localeCompare(
-            `${b.employee.lastName}${b.employee.firstName}`
-          );
-      }
-    });
+    return sortAbsences(data, sortBy);
   }, [data, sortBy]);
 
   const displayedAbsences = useMemo(() => {

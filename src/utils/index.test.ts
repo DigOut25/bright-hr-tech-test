@@ -1,5 +1,20 @@
 import { describe, test, expect } from "vitest";
-import { formatAbsenceType, deriveEndDate, formatDate } from "./index";
+import {
+  formatAbsenceType,
+  deriveEndDate,
+  formatDate,
+  sortAbsences,
+} from "./index";
+import type { Absence, AbsenceType } from "../types/absence";
+
+const mockAbsence: Absence = {
+  id: 1,
+  startDate: "2024-01-01T00:00:00.000Z",
+  days: 5,
+  absenceType: "SICKNESS",
+  employee: { id: "e1", firstName: "Jane", lastName: "Doe" },
+  approved: true,
+};
 
 describe("formatAbsenceType", () => {
   test("formats ANNUAL_LEAVE", () => {
@@ -37,5 +52,26 @@ describe("formatDate", () => {
   test("formats a different month correctly", () => {
     const date = new Date("2025-07-23T12:00:00.000Z");
     expect(formatDate(date)).toBe("23 Jul 2025");
+  });
+});
+
+describe("sortAbsences", () => {
+  test("sorts by start date ascending", () => {
+    const absences = [
+      { ...mockAbsence, id: 1, startDate: "2025-03-01T00:00:00.000Z" },
+      { ...mockAbsence, id: 2, startDate: "2025-01-01T00:00:00.000Z" },
+    ];
+    const sorted = sortAbsences(absences, "startDate");
+    expect(sorted[0].id).toBe(2);
+    expect(sorted[1].id).toBe(1);
+  });
+  test("sorts by absence type alphabetically", () => {
+    const absences = [
+      { ...mockAbsence, absenceType: "SICKNESS" as AbsenceType },
+      { ...mockAbsence, absenceType: "ANNUAL_LEAVE" as AbsenceType },
+    ];
+    const sorted = sortAbsences(absences, "absenceType");
+    expect(sorted[0].absenceType).toBe("ANNUAL_LEAVE");
+    expect(sorted[1].absenceType).toBe("SICKNESS");
   });
 });
